@@ -18,7 +18,7 @@ app.use((req, res, next) => {
     if (proto && proto !== "https") {
         return res.redirect(302, `https://${req.hostname}${req.originalUrl}`);
     }
-    
+
     return next();
 });
 
@@ -38,7 +38,7 @@ app.use(
         cookie: { secure: process.env.NON_SECURE_SESSION !== "true" },
     })
     );
-    
+
 app.set("view engine", "jade");
 
 const isJson = (str) => {
@@ -125,6 +125,7 @@ app.post("/code_to_token", (req, res) => {
             form: reqData,
         },
         (err, response, body) => {
+console.log(JSON.stringify(response.headers));
             result.body = body;
             result.response = response;
             // and add the decoded token

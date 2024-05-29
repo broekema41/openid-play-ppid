@@ -227,6 +227,7 @@ const OIDCURL = (props) => {
       <p>scope={encodeURIComponent(props.scope)}&amp;</p>
       <p>response_type=code&amp;</p>
       <p>state={encodeURIComponent(props.stateToken)}</p>
+      {/* <p>sector_identifier_uri=https://my.sector.com</p> */}
     </div>
   )
 }

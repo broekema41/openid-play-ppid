@@ -76,6 +76,7 @@ class StepOne extends React.Component {
 
   render() {
     this.completeURL = this.props.authEndpoint + '?client_id=' + this.props.clientID + '&redirect_uri=' + this.props.redirectURI +'&scope=' + encodeURI(this.props.scopes) + '&response_type=code&state=' + this.props.stateToken;
+    // + '&sector_identifier_uri=https://my.sector.com/callback'
 
     if(this.props.audience && this.props.audience !== "") {
       this.completeURL += `&audience=${this.props.audience}`;
@@ -98,8 +99,7 @@ class StepOne extends React.Component {
                   client_id=
                   <a onClick={() => { this.props.openModal(true, 'clientID') }} href="#">{this.props.clientID}</a>
                   <br />
-                  &amp;redirect_uri=
-                  https://openidconnect.net/callback
+                  &amp;redirect_uri=https://c1a0-62-140-135-24.ngrok-free.app/callback
                   <br />
                   &amp;scope=
                   <a onClick={() => { this.props.openModal(true, 'scopes') }} href="#">{this.props.scopes}</a>
@@ -107,7 +107,8 @@ class StepOne extends React.Component {
                   <span>&amp;response_type=code</span>
                   <br />
                   <span>&amp;state={this.props.stateToken}</span>
-
+                  {/* <br /> */}
+                  {/* <span>&amp;sector_identifier_uri=https://my.sector.com/callback</span> */}
                   {this.props.audience&& <br/>}
                   {this.props.audience&& '&audience='}
                   {this.props.audience&& <a onClick={() => { this.props.openModal(true, 'audience') }} href="#">{this.props.audience}</a>}
