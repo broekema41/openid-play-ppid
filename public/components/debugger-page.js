@@ -257,12 +257,27 @@ class DebuggerPage extends React.Component {
   }
 
   logOut() {
-    this.deleteAuthState(function() {
-      window.dispatchEvent(new CustomEvent('logOut'));
-      if (this.state.server === 'Auth0') {
-        window.location.href = `https://${this.state.domain}/v2/logout?client_id=${this.state.clientID}&returnTo=${encodeURIComponent(window.location.origin)}`;
-      }  
-    }.bind(this))
+    console.log('logout triggered');
+    const logoutCall = new Ajax({
+      url: `/logout?id_token_hint=${this.state.idToken}&client_id=${this.state.clientID}`,
+      method: 'GET',
+    });
+
+    logoutCall.on('success', function(event){
+      console.log("okokokokok");
+      console.log(event);
+
+      this.deleteAuthState(function() {
+        window.dispatchEvent(new CustomEvent('logOut'));
+        if (this.state.server === 'Auth0') {
+          window.location.href = `https://${this.state.domain}/v2/logout?client_id=${this.state.clientID}&returnTo=${encodeURIComponent(window.location.origin)}`;
+        } else {
+        }
+      }.bind(this))
+
+    }.bind(this));
+
+    logoutCall.send();
   }
 
   render() {
