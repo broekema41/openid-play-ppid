@@ -59,13 +59,13 @@ const discoverySchema = {
     "properties": {
       "authorization_endpoint": {"type": "string"},
       "token_endpoint": {"type": "string"},
-      "userinfo_endpoint": {"type": "string"},
       "jwks_uri": {"type": "string"},
     },
-    "required": ["authorization_endpoint","token_endpoint","userinfo_endpoint","jwks_uri"]
+    "required": ["authorization_endpoint","token_endpoint","jwks_uri"]
   };
 
 app.get("/discover", (req, res) => {
+    console.log(req.query.url);
     request.get(req.query.url, (err, resp, body) => {
         if (err) {
             return res.send(err);
