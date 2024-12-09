@@ -112,6 +112,49 @@ app.post('/backchannel_logout',urlencodedParser, (req, res) => {
     res.status(200).send("");
 });
 
+app.get('/backchannel_exchange',urlencodedParser, (req, res) => {
+
+    // Prepare the request payload
+    const requestData = {
+        client_id: process.env.EXCHANGE_CLIENT_ID,
+        client_secret: process.env.EXCHANGE_CLIENT_SECRET,
+        grant_type: "urn:ietf:params:oauth:grant-type:token-exchange",
+        subject_token: req.query.token,
+        subject_token_type: "urn:ietf:params:oauth:token-type:id_token",
+        requested_token_type: "urn:ietf:params:oauth:token-type:id_token",
+        scope: "openid digital_identity_id email",
+    };
+
+    // Make the POST request
+    request.post(
+      {
+          url: process.env.TOKEN_URI,
+          headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+          },
+          form: requestData,
+      },
+      (error, response, body) => {
+          if (error) {
+              console.error("Error during token exchange:", error);
+              return;
+          }
+
+          // Parse the response
+          if (response.statusCode === 200) {
+              const parsedBody = JSON.parse(body);
+              console.log("Token exchange successful:", parsedBody);
+          } else {
+              console.error(
+                "Token exchange failed:",
+                `Status Code: ${response.statusCode}, Body: ${body}`,
+                response.headers
+              );
+          }
+      }
+    );
+});
+
 
 app.get("*", (req, res) => {
     let code = null;
@@ -148,7 +191,7 @@ app.post("/code_to_token", (req, res) => {
             form: reqData,
         },
         (err, response, body) => {
-console.log(JSON.stringify(response.headers));
+            console.log(JSON.stringify(response.headers));
             result.body = body;
             result.response = response;
             // and add the decoded token

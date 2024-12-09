@@ -24,8 +24,9 @@ class StepFour extends React.Component {
             </div>
             <br />
             <div className="code-box-btn-group">
-              <button onClick={this.props.startOver}  className="code-box-btn is-alt">Start Over</button>
-              <button onClick={this.props.logOut}  className="code-box-btn is-subtle">Log Out</button>
+              <button onClick={this.props.startOver} className="code-box-btn is-alt">Start Over</button>
+              <button onClick={this.props.logOut} className="code-box-btn is-subtle">Log Out</button>
+              <button onClick={this.props.exchange} className="code-box-btn is-subtle">Exchange</button>
             </div>
           </div>
       </div>

@@ -15,6 +15,7 @@ class DebuggerPage extends React.Component {
     this.deleteAuthState = this.deleteAuthState.bind(this);
     this.startOver = this.startOver.bind(this);
     this.logOut = this.logOut.bind(this);
+    this.exchange = this.exchange.bind(this);
     this.scrollAnimated = this.scrollAnimated.bind(this);
     this.scrollToCurrentStep = this.scrollToCurrentStep.bind(this);
     this.openConfigurationModal = this.openConfigurationModal.bind(this);
@@ -256,6 +257,23 @@ class DebuggerPage extends React.Component {
     })
   }
 
+  exchange() {
+    console.log('exchange triggered');
+    const exchangeCall = new Ajax({
+      url: `/backchannel_exchange?token=${this.state.idToken}`,
+      method: 'GET',
+    });
+
+    exchangeCall.on('success', function(event){
+      console.log("okokokoko exchange");
+      console.log(event);
+    }.bind(this));
+
+    exchangeCall.send();
+  }
+
+
+
   logOut() {
     console.log('logout triggered');
     const logoutCall = new Ajax({
@@ -369,6 +387,7 @@ class DebuggerPage extends React.Component {
                   ref="step4"
                   startOver={this.startOver}
                   logOut={this.logOut}
+                  exchange={this.exchange}
                   idTokenDecoded={this.state.idTokenDecoded}
                   isActive={ this.state.currentStep === 4 }
                 />
