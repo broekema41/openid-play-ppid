@@ -5,11 +5,15 @@ const request = require("request");
 const jwt = require("jsonwebtoken");
 const jwkToPem = require("jwk-to-pem");
 const Validator = require('jsonschema').Validator;
-require("dotenv").config({ silent: true });
+const dotEnvConfig = process.env.PORT === '4000' ? { path: '.env2' } : { silent: true };
+require("dotenv").config(dotEnvConfig);
 
 const app = express();
 
 app.use(require("body-parser").json());
+
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = require("body-parser").urlencoded({ extended: false })
 
 app.use(express.static("public"));
 
@@ -69,7 +73,7 @@ app.get("/discover", (req, res) => {
             if (isJson(body)) {
                 const isValid = valid.validate(JSON.parse(body), discoverySchema);
                 if (isValid.errors.length < 1) {
-                    return res.send(body)
+                    return res.send(body);
                 } else {
                     return res.status(400).json({"message":"Discovery document is not valid", "errors": isValid.errors.map(e => e.message)});
                 }
@@ -90,6 +94,25 @@ app.get("/callback", (req, res) => {
         res.redirect("/");
     }
 });
+
+app.get("/logout", (req, res) => {
+    console.log(req.query.id_token_hint || null);
+    console.log(req.query.client_id || null);
+    var url = `${process.env.LOGOUT_URI}?id_token_hint=${req.query.id_token_hint || null}&client_id=${req.query.client_id || null}`;
+    request.get(url, (err, resp, body) => {
+        console.log(resp.status, body);
+        res.json(body);
+    });
+});
+
+app.post('/backchannel_logout',urlencodedParser, (req, res) => {
+    console.log('backchannel_logout has been called');
+    console.log(req.urlencoded);
+    console.log(req.body);
+    console.log(req.headers);
+    res.status(200).send("");
+});
+
 
 app.get("*", (req, res) => {
     let code = null;
