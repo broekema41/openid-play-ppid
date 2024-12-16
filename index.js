@@ -80,6 +80,7 @@ app.get("/discover", (req, res) => {
     });
 });
 
+
 app.get("/callback", (req, res) => {
     if (req.query.code) {
         /* eslint-disable no-param-reassign */
@@ -104,6 +105,14 @@ app.get("*", (req, res) => {
         state: crypto.randomBytes(20).toString("hex"),
         clientId: process.env.CLIENT_ID,
         clientSecret: process.env.CLIENT_SECRET,
+    });
+});
+
+app.post("/session-service/v1/session-upgrade/validate", (req, res) => {
+    console.log('received validate', req.body);
+    res.json({
+        digital_identity_id: "6666-6666-6666-6666-6666",
+        session_upgraded_by: "jan2@helpdesk.nl"
     });
 });
 
